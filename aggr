@@ -1,0 +1,139 @@
+//db.students.find()
+//
+//db.feeditems.find()
+
+// organization and students collections
+//db.students.aggregate([{
+//
+//        $lookup: {
+//                
+//                              
+//                from: "organizations",
+//                localField: "organizationId",
+//                foreignField: "_id",
+//                as: "organization"
+//        
+//        
+//                   }
+//
+//        },
+//    {
+//        $unwind: "$organization"
+//    },
+//    {
+//        $project: {
+//            __v: 0,
+//            updatedAt: 0,
+//            name: 0,
+//            gId: 0,
+//            accountType: 0,
+//            image: 0,
+//            lastAccessedAt: 0,
+//            password: 0,
+//            tokenExpiresAt: 0,
+//            resetPasswordExpires: 0,
+//            resetPasswordToken: 0, 
+//            "organization.__v": 0,
+//            "organization._id": 0,
+//            "organization.userId": 0,
+//            "organization.createdAt": 0,
+//            "organization.updatedAt": 0,
+//           
+//        }
+//    }
+//   
+//        ])
+        
+        
+        
+// Join/nonsql mongodb specific collections and omit classes. 
+// Used to create a unique csv/collection of the data.
+        
+
+db.students.aggregate([
+
+
+        {
+
+        $lookup: {
+                
+                              
+                from: "feeditems",
+                localField: "_id",
+                foreignField: "studentId",
+                as: "studentFeed"
+        
+        
+        }
+},
+        {
+                 $unwind: "$studentFeed"
+       }
+       
+       ,
+    {
+        $project: {
+            
+            
+            updatedAt: 0,
+            __v: 0,
+            gId: 0,
+            accountType: 0,
+            image: 0,
+            lastAccessedAt: 0,
+            image: 0, 
+            password: 0,
+            tokenExpiresAt: 0,
+            "studentFeed._id": 0,
+            "studentFeed.createdAt": 0,
+            "studentFeed.updatedAt": 0,
+            "studentFeed._studentId": 0,
+            "studentFeed.todoList": 0,
+            "studentFeed.timeline": 0,
+            "studentFeed.numberOfChildren": 0,
+            "studentFeed.children": 0,
+            "studentFeed.numberOfPurposes": 0,
+            "studentFeed.images": 0,
+            "studentFeed.__v": 0,
+            "studentFeed.childTypeCounts": 0,
+            "studentFeed.clientId": 0,
+            "studentFeed.color": 0,
+            "studentFeed.origin": 0,
+            "studentFeed.completed": 0,
+            "studentFeed.expectedCompletion": 0,
+            "studentFeed.expectedCompletionAt": 0
+           
+        }
+    },
+    
+     {
+
+        $lookup: {
+                
+                              
+                from: "organizations",
+                localField: "organizationId",
+                foreignField: "_id",
+                as: "organization"
+        
+        
+        }
+       },
+       
+       
+        {
+                 $unwind: "$organization"
+       },
+       
+       {
+        $project: {
+            
+            "organization._id": 0,
+          
+        }
+       }
+       
+
+
+])
+
